@@ -1,0 +1,22 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npx webpack"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "packageManager": "yarn@3.1.1",
+  "devDependencies": {
+    "@types/uuid": "^8.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "eslint": "^8.5.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "nmde-common": "git://github.com/nmde/nmde-common.git",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}

@@ -1,0 +1,9 @@
+.vertex, .thing {
+    position: absolute;
+}
+
+.vertex {
+    background-color: green;
+    height: 5px;
+    width: 5px;
+}
