@@ -1,27 +1,51 @@
-import './index.css';
+import { Vector } from '../sylvester';
 import Camera from './Camera';
 import Renderer from './Renderer';
 import Thing from './Thing';
-import Vector from './Vector';
 import World from './World';
+import { loop } from './util';
 
-const renderer = new Renderer(
-  document.getElementById('game-window') as HTMLElement,
-);
-const world = new World();
-const camera = new Camera();
+/**
+ * Main program entry.
+ */
+async function main() {
+  const renderer = new Renderer(
+    document.getElementById('game-window') as HTMLElement,
+  );
+  const world = new World();
+  const camera = new Camera();
+  world.add(...(await Thing.createFromFile('./dist/monkey.obj')));
+  renderer.setWorld(world);
+  camera.position = new Vector([0, 0, -4]);
+  renderer.camera = camera;
+  renderer.render();
 
-const cube = new Thing();
-cube.toRectangle(100, 100, 100);
+  renderer.speed = 10000;
+  renderer.transition = 'ease';
+  renderer.updateStyles();
+  camera.position = camera.position.add([0, 0, 4]);
+  renderer.render();
 
-world.add(cube, new Vector(0, 0, 0));
-world.add(camera, new Vector(100, 100, 100));
-// camera.setOrientation(new Vector(-1, 1, -1));
+  (window as any).move = function move(movement: Vector) {
+    camera.position = camera.position.add(movement);
+    console.log(`New position: ${camera.position.toString()}`);
+    renderer.render();
+  };
 
-renderer.setCamera(camera);
-renderer.render(world);
+  (window as any).zoom = function zoom(z: number) {
+    camera.zoom = z;
+    renderer.render();
+  };
 
-setInterval(() => {
-  camera.setLocation(camera.location.add(new Vector(0, -1, 0)));
-  renderer.render(world);
-}, 100);
+  (window as any).setTransitionSpeed = function setTransitionSpeed(speed: number) {
+    renderer.speed = speed;
+    renderer.updateStyles();
+  };
+
+  (window as any).setTransitionType = function setTransitionType(type: string) {
+    renderer.transition = type;
+    renderer.updateStyles();
+  };
+}
+
+main();

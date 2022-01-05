@@ -1,5 +1,5 @@
 .vertex, .thing {
-    position: absolute;
+    position: fixed;
 }
 
 .vertex {

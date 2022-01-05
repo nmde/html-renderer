@@ -1,1 +1,5 @@
-export type Coordinate = [number, number, number];
+export type Coordinate = {
+  x: number;
+  y: number;
+  z: number;
+};

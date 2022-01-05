@@ -1,6 +1,4 @@
-import { v4 as uuid } from 'uuid';
 import Thing from './Thing';
-import Vector from './Vector';
 
 /**
  * Stores information about the world.
@@ -9,19 +7,17 @@ export default class World {
   /**
    * Stores information about objects within the world.
    */
-  public state: Record<string, Thing> = {};
+  private state: Record<string, Thing> = {};
 
   /**
-   * Add a thing to the world.
+   * Adds Things to the world.
    *
-   * @param obj - The thing to add.
-   * @param location - Initial location to place the object.
+   * @param objs - The Thing(s) to add.
    */
-  public add(obj: Thing, location: Vector) {
-    const id = uuid();
-    obj.setId(id);
-    obj.setLocation(location);
-    this.state[id] = obj;
+  public add(...objs: Thing[]) {
+    objs.forEach((obj) => {
+      this.state[obj.id] = obj;
+    });
   }
 
   /**
@@ -32,10 +28,8 @@ export default class World {
   public build() {
     const node = document.createElement('div');
     node.classList.add('world');
-    Object.entries(this.state).forEach(([id, thing]) => {
-      const thingNode = thing.build();
-      thingNode.id = id;
-      node.appendChild(thingNode);
+    Object.entries(this.state).forEach((entry) => {
+      node.appendChild(entry[1].build());
     });
     return node;
   }
