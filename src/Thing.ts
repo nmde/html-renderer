@@ -1,7 +1,7 @@
 import axios from 'axios';
 import ObjFileParser from 'obj-file-parser';
 import { v4 as uuid } from 'uuid';
-import { Coordinate } from './types';
+import { Coordinate, Face } from './types';
 
 /**
  * Represents a thing.
@@ -19,6 +19,10 @@ export default class Thing {
       .models.map((model) => {
         const thing = new Thing();
         thing.vertices = model.vertices;
+        thing.faces = model.faces.map((face) => ({
+          vertices: face.vertices.map((vertex) => vertex.vertexIndex),
+        }));
+        console.log(thing.faces);
         return thing;
       });
   }
@@ -31,7 +35,12 @@ export default class Thing {
   /**
    * Object vertices.
    */
-  private vertices: Coordinate[] = [];
+  public vertices: Coordinate[] = [];
+
+  /**
+   * Object faces.
+   */
+  public faces: Face[] = [];
 
   /**
    * Constructs the DOM representation of the Thing.
@@ -49,7 +58,13 @@ export default class Thing {
         'data-position',
         `${vertex.x},${vertex.y},${vertex.z}`,
       );
-      node.appendChild(vertexNode);
+      // node.appendChild(vertexNode);
+    });
+    this.faces.forEach((face) => {
+      const faceNode = document.createElement('div');
+      faceNode.classList.add('face');
+      faceNode.setAttribute('data-vertices', JSON.stringify(face.vertices));
+      node.appendChild(faceNode);
     });
     return node;
   }

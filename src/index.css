@@ -1,4 +1,4 @@
-.vertex, .thing {
+.vertex, .thing, .face {
     position: fixed;
 }
 
@@ -6,4 +6,10 @@
     background-color: green;
     height: 5px;
     width: 5px;
+}
+
+.face {
+    background-color: red;
+    height: 100%;
+    width: 100%;
 }

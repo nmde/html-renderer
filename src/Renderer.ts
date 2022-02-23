@@ -2,6 +2,7 @@ import { Vector } from '../sylvester';
 import Camera from './Camera';
 import World from './World';
 import './index.css';
+import { Coordinate } from './types';
 
 /**
  * Renders.
@@ -54,14 +55,17 @@ export default class Renderer {
     const width = Number(computed.width.replace('px', ''));
     const height = Number(computed.height.replace('px', ''));
     const center = new Vector([width / 2, height / 2]);
-    Array.from(this.container.getElementsByClassName('vertex')).forEach((v) => {
-      const vertex = v as HTMLElement;
-      const coords = vertex
-        .getAttribute('data-position')
-        ?.split(/,/)
-        .map((n) => Number(n));
-      if (coords) {
-        const position = new Vector(coords);
+    this.world?.things.forEach((entry) => {
+      const thing = entry[1];
+      const thingNode = document.getElementById(entry[0]);
+      const vertexNodes = thingNode?.getElementsByClassName(
+        'vertex',
+      ) as HTMLCollectionOf<HTMLElement>;
+      const computedVertices: Coordinate[] = [];
+      for (let v = 0; v < thing.vertices.length; v += 1) {
+        const vertex = thing.vertices[v];
+        const vertexNode = vertexNodes[v];
+        const position = new Vector([vertex.x, vertex.y, vertex.z]);
         const fov = 1.0 / Math.tan(this.camera.fov / 2);
         const aspectRatio = width / height;
         const { near, far } = this.camera;
@@ -80,12 +84,36 @@ export default class Renderer {
           (relativePosition.y * height) / (2 * w),
         ]);
         // todo: clipping
-        vertex.style.left = `${projection.x + center.x}px`;
-        vertex.style.top = `${projection.y + center.y}px`;
-        const size = (1 / relativePosition.norm) * this.camera.zoom;
-        vertex.style.height = `${size}px`;
-        vertex.style.width = `${size}px`;
-        vertex.style.zIndex = `${position.z + 1}`;
+        computedVertices[v] = {
+          x: projection.x + center.x,
+          y: projection.y + center.y,
+          z: position.z + 1,
+        };
+        if (vertexNode) {
+          vertexNode.style.left = `${computedVertices[v].x}px`;
+          vertexNode.style.top = `${computedVertices[v].y}px`;
+          const size = (1 / relativePosition.norm) * this.camera.zoom;
+          vertexNode.style.height = `${size}px`;
+          vertexNode.style.width = `${size}px`;
+          vertexNode.style.zIndex = `${computedVertices[v].z}`;
+        }
+      }
+      const faceNodes = thingNode?.getElementsByClassName(
+        'face',
+      ) as HTMLCollectionOf<HTMLElement>;
+      for (let f = 0; f < thing.faces.length; f += 1) {
+        const face = thing.faces[f];
+        const faceNode = faceNodes[f];
+        let clipPath = '';
+        let opacity = 0;
+        face.vertices.forEach((index) => {
+          const vertex = computedVertices[index - 1];
+          clipPath += `, ${vertex.x}px ${vertex.y}px`;
+          opacity += vertex.z / 100;
+        });
+        clipPath = clipPath.substring(2);
+        faceNode.style.clipPath = `polygon(${clipPath})`;
+        faceNode.style.opacity = `${opacity}`;
       }
     });
   }
@@ -108,7 +136,7 @@ export default class Renderer {
    */
   public updateStyles() {
     if (this.styleContainer) {
-      this.styleContainer.innerHTML = `.vertex { transition: all ${this.speed}ms ${this.transition} }`;
+      this.styleContainer.innerHTML = `.vertex, .face { transition: all ${this.speed}ms ${this.transition} }`;
     }
   }
 }

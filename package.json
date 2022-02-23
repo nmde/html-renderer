@@ -2,7 +2,8 @@
   "name": "game",
   "version": "1.0.0",
   "scripts": {
-    "build": "npx webpack"
+    "build": "npx webpack",
+    "start": "node index.js"
   },
   "main": "index.js",
   "license": "MIT",

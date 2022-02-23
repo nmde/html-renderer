@@ -3,3 +3,7 @@ export type Coordinate = {
   y: number;
   z: number;
 };
+
+export type Face = {
+  vertices: number[];
+};

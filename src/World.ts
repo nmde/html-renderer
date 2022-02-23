@@ -21,6 +21,15 @@ export default class World {
   }
 
   /**
+   * The things in the world.
+   *
+   * @returns The things in the world.
+   */
+  public get things() {
+    return Object.entries(this.state);
+  }
+
+  /**
    * Builds the DOM representation of the world.
    *
    * @returns The world DOM node.
