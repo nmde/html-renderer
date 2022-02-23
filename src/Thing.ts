@@ -19,10 +19,17 @@ export default class Thing {
       .models.map((model) => {
         const thing = new Thing();
         thing.vertices = model.vertices;
+        let minIndex: number;
+        model.faces.forEach((face) => {
+          face.vertices.forEach((vertex) => {
+            if (!minIndex || vertex.vertexIndex < minIndex) {
+              minIndex = vertex.vertexIndex;
+            }
+          });
+        });
         thing.faces = model.faces.map((face) => ({
-          vertices: face.vertices.map((vertex) => vertex.vertexIndex),
+          vertices: face.vertices.map((vertex) => vertex.vertexIndex - minIndex),
         }));
-        console.log(thing.faces);
         return thing;
       });
   }
@@ -58,7 +65,7 @@ export default class Thing {
         'data-position',
         `${vertex.x},${vertex.y},${vertex.z}`,
       );
-      // node.appendChild(vertexNode);
+      node.appendChild(vertexNode);
     });
     this.faces.forEach((face) => {
       const faceNode = document.createElement('div');

@@ -105,15 +105,12 @@ export default class Renderer {
         const face = thing.faces[f];
         const faceNode = faceNodes[f];
         let clipPath = '';
-        let opacity = 0;
         face.vertices.forEach((index) => {
-          const vertex = computedVertices[index - 1];
+          const vertex = computedVertices[index];
           clipPath += `, ${vertex.x}px ${vertex.y}px`;
-          opacity += vertex.z / 100;
         });
         clipPath = clipPath.substring(2);
         faceNode.style.clipPath = `polygon(${clipPath})`;
-        faceNode.style.opacity = `${opacity}`;
       }
     });
   }
