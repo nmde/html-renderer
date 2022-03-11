@@ -32,13 +32,14 @@ export default class World {
   /**
    * Builds the DOM representation of the world.
    *
+   * @param vertices - If vertex nodes should be built.
    * @returns The world DOM node.
    */
-  public build() {
+  public build(vertices = false) {
     const node = document.createElement('div');
     node.classList.add('world');
     Object.entries(this.state).forEach((entry) => {
-      node.appendChild(entry[1].build());
+      node.appendChild(entry[1].build(vertices));
     });
     return node;
   }

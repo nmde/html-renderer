@@ -52,21 +52,24 @@ export default class Thing {
   /**
    * Constructs the DOM representation of the Thing.
    *
+   * @param vertices - If vertices should be built.
    * @returns The DOM node.
    */
-  public build() {
+  public build(vertices = false) {
     const node = document.createElement('div');
     node.classList.add('thing');
     node.id = this.id;
-    this.vertices.forEach((vertex) => {
-      const vertexNode = document.createElement('div');
-      vertexNode.classList.add('vertex');
-      vertexNode.setAttribute(
-        'data-position',
-        `${vertex.x},${vertex.y},${vertex.z}`,
-      );
-      node.appendChild(vertexNode);
-    });
+    if (vertices) {
+      this.vertices.forEach((vertex) => {
+        const vertexNode = document.createElement('div');
+        vertexNode.classList.add('vertex');
+        vertexNode.setAttribute(
+          'data-position',
+          `${vertex.x},${vertex.y},${vertex.z}`,
+        );
+        node.appendChild(vertexNode);
+      });
+    }
     this.faces.forEach((face) => {
       const faceNode = document.createElement('div');
       faceNode.classList.add('face');
