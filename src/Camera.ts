@@ -17,7 +17,7 @@ export default class Camera extends Thing {
   /**
    * The current position of the camera.
    */
-  public position = Vector.Zero();
+  public position = Vector.Zero(3);
 
   /**
    * Zoom level of the camera.

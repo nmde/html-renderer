@@ -14,16 +14,25 @@ async function main() {
   );
   const world = new World();
   const camera = new Camera();
-  // TODO: fix multiple Things
-  world.add(...(await Thing.createFromFile('./dist/dino.obj')));
+  const things = await Thing.createFromFile('./dist/scene.obj');
+  world.add(...things);
   renderer.setWorld(world);
-  camera.position = new Vector([0, -2, -8]);
+  camera.position = new Vector([0, -2, -13]);
   renderer.camera = camera;
   renderer.render();
 
   renderer.speed = 100;
   renderer.transition = 'ease';
   renderer.updateStyles();
+
+  loop(() => {
+    world.rotate(things[0], new Vector([0, 0, 0]), new Vector([0, 0, 5]));
+    renderer.render();
+  }, 100);
+
+  loop(() => {
+    world.rotate(things[1], new Vector([0, 0, 0]), new Vector([5, 0, 0]));
+  }, 100);
 
   (window as any).move = function move(movement: Vector) {
     camera.position = camera.position.add(movement);
