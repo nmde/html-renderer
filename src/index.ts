@@ -25,14 +25,26 @@ async function main() {
   renderer.transition = 'ease';
   renderer.updateStyles();
 
-  loop(() => {
-    world.rotate(things[0], new Vector([0, 0, 0]), new Vector([0, 0, 5]));
-    renderer.render();
-  }, 100);
-
-  loop(() => {
-    world.rotate(things[1], new Vector([0, 0, 0]), new Vector([5, 0, 0]));
-  }, 100);
+  (window as any).rotate = function rotate(
+    obj: number,
+    axis: number[],
+    rotation: number[],
+    angle: number,
+  ) {
+    loop(
+      () => {
+        world.rotate(
+          things[obj],
+          new Vector(axis),
+          new Vector(rotation),
+          Math.PI / 180,
+        );
+        renderer.render();
+      },
+      renderer.speed,
+      (angle * (Math.PI / 180)) / (Math.PI / 180),
+    );
+  };
 
   (window as any).move = function move(movement: Vector) {
     camera.position = camera.position.add(movement);
@@ -45,7 +57,9 @@ async function main() {
     renderer.render();
   };
 
-  (window as any).setTransitionSpeed = function setTransitionSpeed(speed: number) {
+  (window as any).setTransitionSpeed = function setTransitionSpeed(
+    speed: number,
+  ) {
     renderer.speed = speed;
     renderer.updateStyles();
   };

@@ -60,9 +60,10 @@ export default class World {
    *
    * @param thing - The Thing to rotate.
    * @param axis - The axis to rotate around.
-   * @param rotation - The rotation to apply.
+   * @param direction - The direction to rotate.
+   * @param angle - The angle to rotate.
    */
-  public rotate(thing: Thing, axis: Vector, rotation: Vector) {
-    this.state[thing.id].rotate(axis, rotation);
+  public rotate(thing: Thing, axis: Vector, direction: Vector, angle: number) {
+    this.state[thing.id].rotate(axis, direction, angle);
   }
 }

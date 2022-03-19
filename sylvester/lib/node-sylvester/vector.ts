@@ -73,6 +73,36 @@ export default class Vector {
   }
 
   /**
+   * Returns the scalar product of the vector with the argument.
+   *
+   * @param vector - The vector to multiply by.
+   * @returns The dot product of this vector and the argument.
+   */
+  public dot(vector: VectorLike) {
+    const V = getElements(vector);
+    let product = 0;
+    let n = this.elements.length;
+    if (n !== V.length) {
+      return null;
+    }
+    n -= 1;
+    while (n > 0) {
+      product += this.elements[n] * V[n];
+      n -= 1;
+    }
+    return product;
+  }
+
+  /**
+   * Returns a copy of the vector.
+   *
+   * @returns A copy of the vector.
+   */
+  public dup() {
+    return new Vector(this.elements);
+  }
+
+  /**
    * Calls the iterator for each element of the vector in turn.
    *
    * @param fn - The function to apply.
@@ -99,6 +129,15 @@ export default class Vector {
   }
 
   /**
+   * Returns the modulus ('length') of the vector.
+   *
+   * @returns The modulus.
+   */
+  public modulus() {
+    return Math.sqrt(this.dot(this) as number);
+  }
+
+  /**
    * The length of the vector.
    *
    * @returns The length of the vector.
@@ -111,6 +150,19 @@ export default class Vector {
       n -= 1;
     }
     return Math.sqrt(sum);
+  }
+
+  /**
+   * Returns a new vector created by normalizing the receiver.
+   *
+   * @returns The unit vector.
+   */
+  public toUnitVector() {
+    const r = this.modulus();
+    if (r === 0) {
+      return this.dup();
+    }
+    return this.map((x) => x / r);
   }
 
   /**

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { matrix, multiply } from 'mathjs';
 import ObjFileParser from 'obj-file-parser';
 import { v4 as uuid } from 'uuid';
 import { Vector } from '../sylvester';
+import RotationMatrix from './RotationMatrix';
 import { Face } from './types';
 
 /**
@@ -100,31 +100,13 @@ export default class Thing {
    * Rotates the Thing.
    *
    * @param axis - The axis to rotate around.
-   * @param rotation - The rotation to apply.
+   * @param direction - The rotation to apply.
+   * @param angle - The angle to rotate.
    */
-  public rotate(axis: Vector, rotation: Vector) {
-    const r = rotation.map((angle) => (angle * Math.PI) / 180);
-    const yaw = matrix([
-      [Math.cos(r.z), -Math.sin(r.z), 0],
-      [Math.sin(r.z), Math.cos(r.z), 0],
-      [0, 0, 1],
-    ]);
-    const pitch = matrix([
-      [Math.cos(r.y), 0, Math.sin(r.y)],
-      [0, 1, 0],
-      [-Math.sin(r.y), 0, Math.cos(r.y)],
-    ]);
-    const roll = matrix([
-      [1, 0, 0],
-      [0, Math.cos(r.x), -Math.sin(r.x)],
-      [0, Math.sin(r.x), Math.cos(r.x)],
-    ]);
-    const rMatrix = multiply(yaw, multiply(pitch, roll));
+  public rotate(axis: Vector, direction: Vector, angle: number) {
+    const rMatrix = new RotationMatrix(axis, direction, angle);
     for (let i = 0; i < this.vertices.length; i += 1) {
-      const vertex = this.vertices[i];
-      const vMatrix = matrix([[vertex.x], [vertex.y], [vertex.z]]);
-      const result = multiply(rMatrix, vMatrix).toArray() as number[][];
-      this.vertices[i] = new Vector([result[0][0], result[1][0], result[2][0]]);
+      this.vertices[i] = rMatrix.timesXYZ(this.vertices[i]);
     }
   }
 }
