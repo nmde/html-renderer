@@ -1,8 +1,8 @@
-import { Vector } from '../sylvester';
 import Camera from './Camera';
+import Vector from './Vector';
 import World from './World';
-import './index.css';
 import { Coordinate } from './types';
+import './index.css';
 
 /**
  * Renders.
@@ -66,17 +66,6 @@ export default class Renderer {
         const vertex = thing.vertices[v];
         const vertexNode = vertexNodes[v];
         const position = new Vector([vertex.x, vertex.y, vertex.z]);
-        const fov = 1.0 / Math.tan(this.camera.fov / 2);
-        const aspectRatio = width / height;
-        const { near, far } = this.camera;
-        /*
-        const clip = Matrix.create([
-          [fov * aspectRatio, 0, 0, 0],
-          [0, fov, 0, 0],
-          [0, 0, (far + near) / (far - near), 1],
-          [0, 0, (2 * near * far) / (near - far), 0],
-        ]);
-        */
         const relativePosition = this.camera.position.add(position);
         const w = relativePosition.z;
         const projection = new Vector([
@@ -122,7 +111,6 @@ export default class Renderer {
    */
   public setWorld(world: World) {
     this.world = world;
-    this.container.appendChild(world.build());
     this.styleContainer = document.createElement('style');
     this.container.appendChild(this.styleContainer);
     this.updateStyles();

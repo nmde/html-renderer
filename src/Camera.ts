@@ -1,14 +1,10 @@
-import { Vector } from '../sylvester';
 import Thing from './Thing';
+import Vector from './Vector';
 
 /**
  * Controls what is visible in the render.
  */
 export default class Camera extends Thing {
-  public near = 1;
-
-  public far = 2;
-
   /**
    * Field of view.
    */
@@ -17,7 +13,7 @@ export default class Camera extends Thing {
   /**
    * The current position of the camera.
    */
-  public position = Vector.Zero(3);
+  public position = new Vector([0, 0, 0]);
 
   /**
    * Zoom level of the camera.

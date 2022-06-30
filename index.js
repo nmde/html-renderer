@@ -1,12 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const Fastify = require('fastify');
-const FastifyStatic = require('fastify-static');
+const fastifyStatic = require('@fastify/static');
+const fastify = require('fastify');
 const path = require('path');
 
-const app = Fastify();
+const app = fastify();
 
-app.register(FastifyStatic, {
+app.register(fastifyStatic, {
   prefix: '/dist/',
   root: path.join(__dirname, 'dist'),
 });

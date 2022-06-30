@@ -1,7 +1,7 @@
-import { Vector } from '../sylvester';
 import Camera from './Camera';
 import Renderer from './Renderer';
 import Thing from './Thing';
+import Vector from './Vector';
 import World from './World';
 import { loop } from './util';
 
@@ -33,12 +33,7 @@ async function main() {
   ) {
     loop(
       () => {
-        world.rotate(
-          things[obj],
-          new Vector(axis),
-          new Vector(rotation),
-          Math.PI / 180,
-        );
+        things[obj].rotate(new Vector(axis), new Vector(rotation), Math.PI / 180);
         renderer.render();
       },
       renderer.speed,

@@ -1,5 +1,5 @@
 import { matrix } from 'mathjs';
-import { Vector } from '../sylvester';
+import Vector from './Vector';
 
 /**
  * Class for generating rotation matrices.
