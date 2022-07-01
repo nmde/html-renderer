@@ -1,7 +1,8 @@
+import { dist } from 'gl-vec3';
 import Camera from './Camera';
+import Face from './Face';
 import Vector from './Vector';
 import World from './World';
-import { Coordinate } from './types';
 import './index.css';
 
 /**
@@ -52,55 +53,83 @@ export default class Renderer {
    */
   public render() {
     const computed = window.getComputedStyle(this.container);
+    // TODO: don't create new nodes each render
+    this.container.innerHTML = '';
     const width = Number(computed.width.replace('px', ''));
     const height = Number(computed.height.replace('px', ''));
     const center = new Vector([width / 2, height / 2]);
-    this.world?.things.forEach((entry) => {
-      const thing = entry[1];
-      const thingNode = document.getElementById(entry[0]);
-      const vertexNodes = thingNode?.getElementsByClassName(
-        'vertex',
-      ) as HTMLCollectionOf<HTMLElement>;
-      const computedVertices: Coordinate[] = [];
-      for (let v = 0; v < thing.vertices.length; v += 1) {
-        const vertex = thing.vertices[v];
-        const vertexNode = vertexNodes[v];
-        const position = new Vector([vertex.x, vertex.y, vertex.z]);
-        const relativePosition = this.camera.position.add(position);
-        const w = relativePosition.z;
-        const projection = new Vector([
-          (relativePosition.x * width) / (2 * w),
-          (relativePosition.y * height) / (2 * w),
-        ]);
-        // todo: clipping
-        computedVertices[v] = {
-          x: projection.x + center.x,
-          y: projection.y + center.y,
-          z: position.z + 1,
-        };
-        if (vertexNode) {
-          vertexNode.style.left = `${computedVertices[v].x}px`;
-          vertexNode.style.top = `${computedVertices[v].y}px`;
-          const size = (1 / relativePosition.norm) * this.camera.zoom;
-          vertexNode.style.height = `${size}px`;
-          vertexNode.style.width = `${size}px`;
-          vertexNode.style.zIndex = `${computedVertices[v].z}`;
-        }
-      }
-      const faceNodes = thingNode?.getElementsByClassName(
-        'face',
-      ) as HTMLCollectionOf<HTMLElement>;
-      for (let f = 0; f < thing.faces.length; f += 1) {
-        const face = thing.faces[f];
-        const faceNode = faceNodes[f];
-        let clipPath = '';
-        face.vertices.forEach((index) => {
-          const vertex = computedVertices[index];
-          clipPath += `, ${vertex.x}px ${vertex.y}px`;
+    this.world?.things.forEach(([, thing]) => {
+      const surfaces: Face[] = [];
+      // Calculate bounding rectangles
+      // TODO: calculate overlap within rectangles for better accuracy
+      thing.faces.forEach((face, f) => {
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+        const projectedVertices = face.vertices.map((vertex) => {
+          // Calculate current projection
+          const relativePosition = this.camera.position.add(vertex);
+          const projection = new Vector(
+            [
+              (relativePosition.x * width) / (2 * relativePosition.z) +
+                center.x,
+              (relativePosition.y * height) / (2 * relativePosition.z) +
+                center.y,
+              vertex.z,
+            ].map((v) => Number(v.toPrecision(4))),
+          );
+          // Calculate bounding rectangle
+          if (projection.x < minX) {
+            minX = projection.x;
+          }
+          if (projection.y < minY) {
+            minY = projection.y;
+          }
+          if (projection.x > maxX) {
+            maxX = projection.x;
+          }
+          if (projection.y > maxY) {
+            maxY = projection.y;
+          }
+          return projection;
         });
-        clipPath = clipPath.substring(2);
-        faceNode.style.clipPath = `polygon(${clipPath})`;
-      }
+        thing.faces[f].boundingRectangle = [minX, maxX, minY, maxY];
+        // Check if the face is completely obscured by existing faces
+        let collides = false;
+        surfaces.forEach((surfaceFace) => {
+          const bR2 = surfaceFace.boundingRectangle;
+          collides =
+            collides ||
+            (bR2[0] >= minX &&
+              bR2[1] <= maxX &&
+              bR2[3] <= minY &&
+              bR2[4] >= maxY &&
+              dist(this.camera.position.value, [minX, minY, face.minZ]) >
+                dist(this.camera.position.value, [
+                  surfaceFace.boundingRectangle[0],
+                  surfaceFace.boundingRectangle[2],
+                  surfaceFace.minZ,
+                ]));
+          // TODO: overwrite faces that the current face obscures
+        });
+        // Create the face
+        if (!collides) {
+          surfaces.push(thing.faces[f]);
+          const faceNode = document.createElement('div');
+          faceNode.classList.add('face');
+          faceNode.style.left = `${minX}px`;
+          faceNode.style.width = `${maxX - minX}px`;
+          faceNode.style.top = `${minY}px`;
+          faceNode.style.height = `${maxY - minY}px`;
+          let clipPath = '';
+          projectedVertices.forEach((vertex) => {
+            clipPath += `, ${vertex.x - minX}px ${vertex.y - minY}px`;
+          });
+          faceNode.style.clipPath = `polygon(${clipPath.substring(2)})`;
+          this.container.appendChild(faceNode);
+        }
+      });
     });
   }
 

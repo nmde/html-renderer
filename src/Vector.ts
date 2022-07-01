@@ -1,18 +1,18 @@
-import { add, len } from 'gl-vec3';
+import { add, len, sub } from 'gl-vec3';
 
 /**
  * Wrapper class around gl-vec3.
  */
 export default class Vector {
-  public values: number[] = [];
+  public value: number[] = [];
 
   /**
    * Constructs vector.
    *
-   * @param values - The vector values.
+   * @param value - The vector values.
    */
-  public constructor(values: number[]) {
-    this.values = values;
+  public constructor(value: number[]) {
+    this.value = value;
   }
 
   /**
@@ -22,8 +22,8 @@ export default class Vector {
    * @returns The result of the vector addition.
    */
   public add(v: Vector): Vector {
-    const temp = this.clone().values;
-    add(temp, temp, v.values);
+    const temp = this.clone().value;
+    add(temp, temp, v.value);
     return new Vector(temp);
   }
 
@@ -33,7 +33,7 @@ export default class Vector {
    * @returns The clone vector.
    */
   public clone(): Vector {
-    return new Vector([...this.values]);
+    return new Vector([...this.value]);
   }
 
   /**
@@ -42,7 +42,19 @@ export default class Vector {
    * @returns The vector norm (length).
    */
   public get norm(): number {
-    return len(this.values);
+    return len(this.value);
+  }
+
+  /**
+   * Subtracts the given vector from this vector.
+   *
+   * @param v - The vector to subtract.
+   * @returns The result of the vector substraction.
+   */
+  public subtract(v: Vector): Vector {
+    const temp = this.clone().value;
+    sub(temp, temp, v.value);
+    return new Vector(temp);
   }
 
   /**
@@ -51,7 +63,7 @@ export default class Vector {
    * @returns The X coordinate.
    */
   public get x(): number {
-    return this.values[0];
+    return this.value[0];
   }
 
   /**
@@ -60,7 +72,7 @@ export default class Vector {
    * @returns The Y coordinate.
    */
   public get y(): number {
-    return this.values[1];
+    return this.value[1];
   }
 
   /**
@@ -69,6 +81,6 @@ export default class Vector {
    * @returns The Z coordinate.
    */
   public get z(): number {
-    return this.values[2];
+    return this.value[2];
   }
 }

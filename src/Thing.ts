@@ -1,9 +1,9 @@
 import axios from 'axios';
 import ObjFileParser from 'obj-file-parser';
 import { v4 as uuid } from 'uuid';
+import Face from './Face';
 import RotationMatrix from './RotationMatrix';
 import Vector from './Vector';
-import { Face } from './types';
 
 /**
  * Represents a thing.
@@ -31,11 +31,14 @@ export default class Thing {
             }
           });
         });
-        thing.faces = model.faces.map((face) => ({
-          vertices: face.vertices.map(
-            (vertex) => vertex.vertexIndex - minIndex,
-          ),
-        }));
+        thing.faces = model.faces.map(
+          (face) =>
+            new Face(
+              face.vertices.map(
+                (vertex) => thing.vertices[vertex.vertexIndex - minIndex],
+              ),
+            ),
+        );
         return thing;
       });
   }

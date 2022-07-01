@@ -6,6 +6,11 @@ import Vector from './Vector';
  */
 export default class Camera extends Thing {
   /**
+   * The direction the camera is facing.
+   */
+  public direction = new Vector([0, 0, 1]);
+
+  /**
    * Field of view.
    */
   public fov = 90;
