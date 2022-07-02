@@ -1,3 +1,4 @@
+import pointInPolgyon from 'point-in-polygon';
 import Camera from './Camera';
 import Face from './Face';
 import Thing from './Thing';
@@ -18,6 +19,11 @@ export default class Renderer {
    * The DOM element to render within.
    */
   private container: HTMLElement;
+
+  /**
+   * Nodes that display the render.
+   */
+  private nodes: Record<string, Record<string, HTMLDivElement>> = {};
 
   /**
    * Animation speed (ms).
@@ -99,7 +105,6 @@ export default class Renderer {
     });
     // Cast rays
     const intersections: Record<number, Record<number, number>> = {};
-    console.log(`${leftBound},${rightBound}`);
     for (let x = leftBound; x < rightBound; x += 1) {
       for (let y = topBound; y < bottomBound; y += 1) {
         const ray = new Vector([x, y, this.camera.position.z]);
@@ -107,32 +112,48 @@ export default class Renderer {
           let intersects = false;
           let f = 0;
           while (!intersects && f < thing.faces.length) {
-            const [minX, maxX, minY, maxY] = thing.faces[f].bounds;
-            intersects =
-              ray.x >= minX && ray.x <= maxX && ray.y >= minY && ray.y <= maxY;
+            intersects = pointInPolgyon(
+              [ray.x, ray.y],
+              thing.faces[f].vertices.map((vertex) => [
+                vertex.value[0],
+                vertex.value[1],
+              ]),
+            );
             f += 1;
           }
           if (intersects) {
             if (!intersections[x]) {
               intersections[x] = {};
             }
-            if (!intersections[x][y]) {
-              intersections[x][y] = this.camera.position.z;
-            }
+            intersections[x][y] = ray.z;
           }
         });
       }
     }
-    Object.entries(intersections).forEach(([x, xy]) => {
-      Object.entries(xy).forEach(([y, z]) => {
-        const pointNode = document.createElement('div');
-        pointNode.classList.add('point');
-        pointNode.style.left = `${x}px`;
-        pointNode.style.top = `${y}px`;
-        pointNode.style.zIndex = `${z}`;
-        this.container.appendChild(pointNode);
-      });
-    });
+    for (let x = leftBound; x < rightBound; x += 1) {
+      for (let y = topBound; y < bottomBound; y += 1) {
+        if (intersections[x] && intersections[x][y]) {
+          if (this.nodes[x] && this.nodes[x][y]) {
+            this.nodes[x][y].style.display = 'block';
+          } else {
+            const pointNode = document.createElement('div');
+            pointNode.classList.add('point');
+            pointNode.style.left = `${x}px`;
+            pointNode.style.top = `${y}px`;
+            pointNode.style.zIndex = `${intersections[x][y]}`;
+            this.container.appendChild(pointNode);
+            if (!this.nodes[x]) {
+              this.nodes[x] = {};
+            }
+            this.nodes[x][y] = pointNode;
+          }
+        } else {
+          if (this.nodes[x] && this.nodes[x][y]) {
+            this.nodes[x][y].style.display = 'none';
+          }
+        }
+      }
+    }
   }
 
   /**

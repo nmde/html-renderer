@@ -13,6 +13,7 @@
     "@types/d3-color": "^3.1.0",
     "@types/d3-interpolate": "^3.0.1",
     "@types/gl-vec3": "^1.1.1",
+    "@types/point-in-polygon": "^1.1.1",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
@@ -42,6 +43,7 @@
     "gl-vec3": "^1.1.3",
     "mathjs": "^10.6.4",
     "obj-file-parser": "^0.5.3",
+    "point-in-polygon": "^1.1.0",
     "uuid": "^8.3.2"
   }
 }

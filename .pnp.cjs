@@ -38,6 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/d3-color", "npm:3.1.0"],\
             ["@types/d3-interpolate", "npm:3.0.1"],\
             ["@types/gl-vec3", "npm:1.1.1"],\
+            ["@types/point-in-polygon", "npm:1.1.1"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@typescript-eslint/eslint-plugin", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
             ["@typescript-eslint/parser", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
@@ -58,6 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mathjs", "npm:10.6.4"],\
             ["nmde-common", "https://github.com/nmde/nmde-common.git#commit=0065f98ba13a23b81035f216e0b8396016610cf1"],\
             ["obj-file-parser", "npm:0.5.3"],\
+            ["point-in-polygon", "npm:1.1.0"],\
             ["style-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:3.3.1"],\
             ["ts-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:9.3.1"],\
             ["tslib", "npm:2.4.0"],\
@@ -3327,6 +3329,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/point-in-polygon", [\
+        ["npm:1.1.1", {\
+          "packageLocation": "./.yarn/cache/@types-point-in-polygon-npm-1.1.1-7002b9a625-d362eaff5b.zip/node_modules/@types/point-in-polygon/",\
+          "packageDependencies": [\
+            ["@types/point-in-polygon", "npm:1.1.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/prettier", [\
         ["npm:2.6.3", {\
           "packageLocation": "./.yarn/cache/@types-prettier-npm-2.6.3-8d27063d48-e1836699ca.zip/node_modules/@types/prettier/",\
@@ -6540,6 +6551,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/d3-color", "npm:3.1.0"],\
             ["@types/d3-interpolate", "npm:3.0.1"],\
             ["@types/gl-vec3", "npm:1.1.1"],\
+            ["@types/point-in-polygon", "npm:1.1.1"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@typescript-eslint/eslint-plugin", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
             ["@typescript-eslint/parser", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
@@ -6560,6 +6572,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mathjs", "npm:10.6.4"],\
             ["nmde-common", "https://github.com/nmde/nmde-common.git#commit=0065f98ba13a23b81035f216e0b8396016610cf1"],\
             ["obj-file-parser", "npm:0.5.3"],\
+            ["point-in-polygon", "npm:1.1.0"],\
             ["style-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:3.3.1"],\
             ["ts-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:9.3.1"],\
             ["tslib", "npm:2.4.0"],\
@@ -8937,6 +8950,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["pkg-dir", "npm:4.2.0"],\
             ["find-up", "npm:4.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["point-in-polygon", [\
+        ["npm:1.1.0", {\
+          "packageLocation": "./.yarn/cache/point-in-polygon-npm-1.1.0-7a1fd13f23-67a6374f0b.zip/node_modules/point-in-polygon/",\
+          "packageDependencies": [\
+            ["point-in-polygon", "npm:1.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\

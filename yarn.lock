@@ -2016,6 +2016,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/point-in-polygon@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@types/point-in-polygon@npm:1.1.1"
+  checksum: d362eaff5b3982da333c019b015a5dd3381ffc79099e8403bdcec1647bb1e8d3f7dd1391041094c8cd70957a8ed9bb6e1aff4ea51a159fb6ad52554ab2301f05
+  languageName: node
+  linkType: hard
+
 "@types/prettier@npm:^2.1.5":
   version: 2.6.3
   resolution: "@types/prettier@npm:2.6.3"
@@ -4364,6 +4371,7 @@ __metadata:
     "@types/d3-color": ^3.1.0
     "@types/d3-interpolate": ^3.0.1
     "@types/gl-vec3": ^1.1.1
+    "@types/point-in-polygon": ^1.1.1
     "@types/uuid": ^8.3.4
     "@typescript-eslint/eslint-plugin": ^5.30.0
     "@typescript-eslint/parser": ^5.30.0
@@ -4384,6 +4392,7 @@ __metadata:
     mathjs: ^10.6.4
     nmde-common: "https://github.com/nmde/nmde-common.git"
     obj-file-parser: ^0.5.3
+    point-in-polygon: ^1.1.0
     style-loader: ^3.3.1
     ts-loader: ^9.3.1
     tslib: ^2.4.0
@@ -6453,6 +6462,13 @@ __metadata:
   dependencies:
     find-up: ^4.0.0
   checksum: 9863e3f35132bf99ae1636d31ff1e1e3501251d480336edb1c211133c8d58906bed80f154a1d723652df1fda91e01c7442c2eeaf9dc83157c7ae89087e43c8d6
+  languageName: node
+  linkType: hard
+
+"point-in-polygon@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "point-in-polygon@npm:1.1.0"
+  checksum: 67a6374f0b79bc872bde8e375d7d5ea011a1419c5f4320dfb7705801cd3a8fcaee8bff385465e075b2ce863bbc86ccd74c63345d9f326981cd0807642bc5199c
   languageName: node
   linkType: hard
 

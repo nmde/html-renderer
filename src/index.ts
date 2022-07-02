@@ -17,7 +17,7 @@ async function main() {
   const things = await Thing.createFromFile('./dist/scene.obj');
   world.add(...things);
   renderer.setWorld(world);
-  camera.position = new Vector([0, -2, -13]);
+  camera.position = new Vector([0, 0, 0]);
   renderer.camera = camera;
   renderer.render();
 

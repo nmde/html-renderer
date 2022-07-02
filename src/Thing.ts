@@ -16,6 +16,7 @@ export default class Thing {
    * @returns Thing objects from the file.
    */
   public static async createFromFile(path: string): Promise<Thing[]> {
+    // TODO: creating bounding box while constructing
     return new ObjFileParser((await axios.get(path)).data)
       .parse()
       .models.map((model) => {
