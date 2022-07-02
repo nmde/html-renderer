@@ -1,6 +1,6 @@
-import { dist } from 'gl-vec3';
 import Camera from './Camera';
 import Face from './Face';
+import Thing from './Thing';
 import Vector from './Vector';
 import World from './World';
 import './index.css';
@@ -58,77 +58,79 @@ export default class Renderer {
     const width = Number(computed.width.replace('px', ''));
     const height = Number(computed.height.replace('px', ''));
     const center = new Vector([width / 2, height / 2]);
-    this.world?.things.forEach(([, thing]) => {
-      const surfaces: Face[] = [];
-      // Calculate bounding rectangles
+    let leftBound = Infinity;
+    let rightBound = -Infinity;
+    let topBound = Infinity;
+    let bottomBound = -Infinity;
+    // Calculate projections onto the screen
+    const projected = this.world?.things.map(([, thing]) => {
       // TODO: calculate overlap within rectangles for better accuracy
-      thing.faces.forEach((face, f) => {
-        let minX = Infinity;
-        let minY = Infinity;
-        let maxX = -Infinity;
-        let maxY = -Infinity;
-        const projectedVertices = face.vertices.map((vertex) => {
-          // Calculate current projection
-          const relativePosition = this.camera.position.add(vertex);
-          const projection = new Vector(
-            [
-              (relativePosition.x * width) / (2 * relativePosition.z) +
-                center.x,
-              (relativePosition.y * height) / (2 * relativePosition.z) +
-                center.y,
-              vertex.z,
-            ].map((v) => Number(v.toPrecision(4))),
-          );
-          // Calculate bounding rectangle
-          if (projection.x < minX) {
-            minX = projection.x;
+      const projectedThing = new Thing();
+      projectedThing.faces = thing.faces.map((face) => {
+        return new Face(
+          face.vertices.map((vertex) => {
+            const relativePosition = this.camera.position.add(vertex);
+            const projection = new Vector(
+              [
+                (relativePosition.x * width) / (2 * relativePosition.z) +
+                  center.x,
+                (relativePosition.y * height) / (2 * relativePosition.z) +
+                  center.y,
+                vertex.z,
+              ].map((v) => Number(v.toPrecision(4))),
+            );
+            if (projection.x < leftBound) {
+              leftBound = Math.floor(projection.x);
+            }
+            if (projection.x > rightBound) {
+              rightBound = Math.ceil(projection.x);
+            }
+            if (projection.y < topBound) {
+              topBound = Math.floor(projection.y);
+            }
+            if (projection.y > bottomBound) {
+              bottomBound = Math.ceil(projection.y);
+            }
+            return projection;
+          }),
+        );
+      });
+      return projectedThing;
+    });
+    // Cast rays
+    const intersections: Record<number, Record<number, number>> = {};
+    console.log(`${leftBound},${rightBound}`);
+    for (let x = leftBound; x < rightBound; x += 1) {
+      for (let y = topBound; y < bottomBound; y += 1) {
+        const ray = new Vector([x, y, this.camera.position.z]);
+        projected?.forEach((thing) => {
+          let intersects = false;
+          let f = 0;
+          while (!intersects && f < thing.faces.length) {
+            const [minX, maxX, minY, maxY] = thing.faces[f].bounds;
+            intersects =
+              ray.x >= minX && ray.x <= maxX && ray.y >= minY && ray.y <= maxY;
+            f += 1;
           }
-          if (projection.y < minY) {
-            minY = projection.y;
+          if (intersects) {
+            if (!intersections[x]) {
+              intersections[x] = {};
+            }
+            if (!intersections[x][y]) {
+              intersections[x][y] = this.camera.position.z;
+            }
           }
-          if (projection.x > maxX) {
-            maxX = projection.x;
-          }
-          if (projection.y > maxY) {
-            maxY = projection.y;
-          }
-          return projection;
         });
-        thing.faces[f].boundingRectangle = [minX, maxX, minY, maxY];
-        // Check if the face is completely obscured by existing faces
-        let collides = false;
-        surfaces.forEach((surfaceFace) => {
-          const bR2 = surfaceFace.boundingRectangle;
-          collides =
-            collides ||
-            (bR2[0] >= minX &&
-              bR2[1] <= maxX &&
-              bR2[3] <= minY &&
-              bR2[4] >= maxY &&
-              dist(this.camera.position.value, [minX, minY, face.minZ]) >
-                dist(this.camera.position.value, [
-                  surfaceFace.boundingRectangle[0],
-                  surfaceFace.boundingRectangle[2],
-                  surfaceFace.minZ,
-                ]));
-          // TODO: overwrite faces that the current face obscures
-        });
-        // Create the face
-        if (!collides) {
-          surfaces.push(thing.faces[f]);
-          const faceNode = document.createElement('div');
-          faceNode.classList.add('face');
-          faceNode.style.left = `${minX}px`;
-          faceNode.style.width = `${maxX - minX}px`;
-          faceNode.style.top = `${minY}px`;
-          faceNode.style.height = `${maxY - minY}px`;
-          let clipPath = '';
-          projectedVertices.forEach((vertex) => {
-            clipPath += `, ${vertex.x - minX}px ${vertex.y - minY}px`;
-          });
-          faceNode.style.clipPath = `polygon(${clipPath.substring(2)})`;
-          this.container.appendChild(faceNode);
-        }
+      }
+    }
+    Object.entries(intersections).forEach(([x, xy]) => {
+      Object.entries(xy).forEach(([y, z]) => {
+        const pointNode = document.createElement('div');
+        pointNode.classList.add('point');
+        pointNode.style.left = `${x}px`;
+        pointNode.style.top = `${y}px`;
+        pointNode.style.zIndex = `${z}`;
+        this.container.appendChild(pointNode);
       });
     });
   }

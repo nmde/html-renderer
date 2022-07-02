@@ -10,6 +10,8 @@
   "packageManager": "yarn@3.2.1",
   "devDependencies": {
     "@babel/core": "^7.18.6",
+    "@types/d3-color": "^3.1.0",
+    "@types/d3-interpolate": "^3.0.1",
     "@types/gl-vec3": "^1.1.1",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
@@ -34,6 +36,8 @@
   "dependencies": {
     "@fastify/static": "^6.4.0",
     "axios": "^0.27.2",
+    "d3-color": "^3.1.0",
+    "d3-interpolate": "^3.0.1",
     "fastify": "^4.2.0",
     "gl-vec3": "^1.1.3",
     "mathjs": "^10.6.4",

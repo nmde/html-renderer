@@ -14,7 +14,7 @@ async function main() {
   );
   const world = new World();
   const camera = new Camera();
-  const things = await Thing.createFromFile('./dist/dino.obj');
+  const things = await Thing.createFromFile('./dist/scene.obj');
   world.add(...things);
   renderer.setWorld(world);
   camera.position = new Vector([0, -2, -13]);
@@ -43,7 +43,7 @@ async function main() {
 
   (window as any).move = function move(movement: number[]) {
     camera.position = camera.position.add(new Vector(movement));
-    console.log(`New position: ${camera.position.toString()}`);
+    console.log(`New position: ${camera.position.value.join(',')}`);
     renderer.render();
   };
 

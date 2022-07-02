@@ -24,17 +24,50 @@ export default class Face {
   }
 
   /**
-   * Gets the current smallest Z value in the face's vertices.
-   * 
-   * @returns The min z.
+   * Calculates the bounding rectangle.
+   *
+   * @returns The bounding rectangle.
    */
-  public get minZ(): number {
+  public get bounds(): number[] {
+    let minX = Infinity;
+    let minY = Infinity;
     let minZ = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    let maxZ = -Infinity;
     this.vertices.forEach((vertex) => {
+      if (vertex.x < minX) {
+        minX = vertex.x;
+      }
+      if (vertex.y < minY) {
+        minY = vertex.y;
+      }
       if (vertex.z < minZ) {
         minZ = vertex.z;
       }
+      if (vertex.x > maxX) {
+        maxX = vertex.x;
+      }
+      if (vertex.y > maxY) {
+        maxY = vertex.y;
+      }
+      if (vertex.z > maxZ) {
+        maxZ = vertex.z;
+      }
     });
-    return minZ;
+    return [minX, maxX, minY, maxY, minZ, maxZ];
+  }
+
+  /**
+   * Gets a point in the middle of the face.
+   *
+   * @returns The midpoint.
+   */
+  public get midpoint(): Vector {
+    return new Vector([
+      (this.bounds[0] + this.bounds[1]) / 2,
+      (this.bounds[2] + this.bounds[3]) / 2,
+      (this.bounds[4] + this.bounds[5]) / 2,
+    ]);
   }
 }

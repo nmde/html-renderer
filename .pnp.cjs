@@ -35,6 +35,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@babel/core", "npm:7.18.6"],\
             ["@fastify/static", "npm:6.4.0"],\
+            ["@types/d3-color", "npm:3.1.0"],\
+            ["@types/d3-interpolate", "npm:3.0.1"],\
             ["@types/gl-vec3", "npm:1.1.1"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@typescript-eslint/eslint-plugin", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
@@ -42,6 +44,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:0.27.2"],\
             ["babel-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:8.2.5"],\
             ["css-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:6.7.1"],\
+            ["d3-color", "npm:3.1.0"],\
+            ["d3-interpolate", "npm:3.0.1"],\
             ["eslint", "npm:8.18.0"],\
             ["eslint-config-airbnb-typescript", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:17.0.0"],\
             ["eslint-plugin-import", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:2.26.0"],\
@@ -3191,6 +3195,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/d3-color", [\
+        ["npm:3.1.0", {\
+          "packageLocation": "./.yarn/cache/@types-d3-color-npm-3.1.0-e4a43fff88-b1856f17d6.zip/node_modules/@types/d3-color/",\
+          "packageDependencies": [\
+            ["@types/d3-color", "npm:3.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/d3-interpolate", [\
+        ["npm:3.0.1", {\
+          "packageLocation": "./.yarn/cache/@types-d3-interpolate-npm-3.0.1-6fb3cc4131-29ce472968.zip/node_modules/@types/d3-interpolate/",\
+          "packageDependencies": [\
+            ["@types/d3-interpolate", "npm:3.0.1"],\
+            ["@types/d3-color", "npm:3.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/eslint", [\
         ["npm:8.4.3", {\
           "packageLocation": "./.yarn/cache/@types-eslint-npm-8.4.3-d515b721fd-cc199be84e.zip/node_modules/@types/eslint/",\
@@ -5211,6 +5234,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["d3-color", [\
+        ["npm:3.1.0", {\
+          "packageLocation": "./.yarn/cache/d3-color-npm-3.1.0-fc73fe3b15-4931fbfda5.zip/node_modules/d3-color/",\
+          "packageDependencies": [\
+            ["d3-color", "npm:3.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["d3-interpolate", [\
+        ["npm:3.0.1", {\
+          "packageLocation": "./.yarn/cache/d3-interpolate-npm-3.0.1-77ddca7977-a42ba314e2.zip/node_modules/d3-interpolate/",\
+          "packageDependencies": [\
+            ["d3-interpolate", "npm:3.0.1"],\
+            ["d3-color", "npm:3.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["debug", [\
         ["npm:2.6.9", {\
           "packageLocation": "./.yarn/cache/debug-npm-2.6.9-7d4cb597dc-d2f51589ca.zip/node_modules/debug/",\
@@ -6495,6 +6537,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["game", "workspace:."],\
             ["@babel/core", "npm:7.18.6"],\
             ["@fastify/static", "npm:6.4.0"],\
+            ["@types/d3-color", "npm:3.1.0"],\
+            ["@types/d3-interpolate", "npm:3.0.1"],\
             ["@types/gl-vec3", "npm:1.1.1"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@typescript-eslint/eslint-plugin", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
@@ -6502,6 +6546,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:0.27.2"],\
             ["babel-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:8.2.5"],\
             ["css-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:6.7.1"],\
+            ["d3-color", "npm:3.1.0"],\
+            ["d3-interpolate", "npm:3.0.1"],\
             ["eslint", "npm:8.18.0"],\
             ["eslint-config-airbnb-typescript", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:17.0.0"],\
             ["eslint-plugin-import", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:2.26.0"],\

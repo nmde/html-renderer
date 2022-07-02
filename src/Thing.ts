@@ -78,8 +78,10 @@ export default class Thing {
    */
   public rotate(axis: Vector, direction: Vector, angle: number) {
     const rMatrix = new RotationMatrix(axis, direction, angle);
-    for (let i = 0; i < this.vertices.length; i += 1) {
-      this.vertices[i] = rMatrix.timesXYZ(this.vertices[i]);
-    }
+    this.faces.forEach((face, f) => {
+      this.faces[f].vertices = face.vertices.map((vertex) =>
+        rMatrix.timesXYZ(vertex),
+      );
+    });
   }
 }
