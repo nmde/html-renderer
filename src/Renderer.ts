@@ -23,7 +23,7 @@ export default class Renderer {
   /**
    * Nodes that display the render.
    */
-  private nodes: Record<string, Record<string, HTMLDivElement>> = {};
+  private nodes: HTMLDivElement[] = [];
 
   /**
    * Animation speed (ms).
@@ -58,9 +58,8 @@ export default class Renderer {
    * Renders a single frame.
    */
   public render() {
+    const start = new Date();
     const computed = window.getComputedStyle(this.container);
-    // TODO: don't create new nodes each render
-    this.container.innerHTML = '';
     const width = Number(computed.width.replace('px', ''));
     const height = Number(computed.height.replace('px', ''));
     const center = new Vector([width / 2, height / 2]);
@@ -104,7 +103,7 @@ export default class Renderer {
       return projectedThing;
     });
     // Cast rays
-    const intersections: Record<number, Record<number, number>> = {};
+    const intersections: number[][] = [];
     for (let x = leftBound; x < rightBound; x += 1) {
       for (let y = topBound; y < bottomBound; y += 1) {
         const ray = new Vector([x, y, this.camera.position.z]);
@@ -121,39 +120,58 @@ export default class Renderer {
             );
             f += 1;
           }
+          if (!intersections[x]) {
+            intersections[x] = [];
+          }
           if (intersects) {
-            if (!intersections[x]) {
-              intersections[x] = {};
-            }
-            intersections[x][y] = ray.z;
+            intersections[x][y] = 1;
+          } else {
+            intersections[x][y] = 0;
           }
         });
       }
     }
-    for (let x = leftBound; x < rightBound; x += 1) {
-      for (let y = topBound; y < bottomBound; y += 1) {
-        if (intersections[x] && intersections[x][y]) {
-          if (this.nodes[x] && this.nodes[x][y]) {
-            this.nodes[x][y].style.display = 'block';
+    const polygons: number[][] = [];
+    intersections.forEach((row, x) => {
+      let rect: number[] = [0, 0];
+      let buildingPolygon = false;
+      row.forEach((col, y) => {
+        if (col === 1) {
+          if (buildingPolygon) {
+            rect[1] = y;
           } else {
-            const pointNode = document.createElement('div');
-            pointNode.classList.add('point');
-            pointNode.style.left = `${x}px`;
-            pointNode.style.top = `${y}px`;
-            pointNode.style.zIndex = `${intersections[x][y]}`;
-            this.container.appendChild(pointNode);
-            if (!this.nodes[x]) {
-              this.nodes[x] = {};
-            }
-            this.nodes[x][y] = pointNode;
+            buildingPolygon = true;
+            rect[0] = y;
           }
-        } else {
-          if (this.nodes[x] && this.nodes[x][y]) {
-            this.nodes[x][y].style.display = 'none';
-          }
+        } else if (buildingPolygon) {
+          buildingPolygon = false;
+          polygons.push([x, ...rect]);
+          rect = [0, 0];
         }
+      });
+      if (buildingPolygon) {
+        polygons.push([x, ...rect]);
       }
-    }
+    });
+    const calculated = new Date();
+    console.log(`Calculated polygons in ${+calculated - +start}`);
+
+    // TODO: try to adjust existing nodes instead of erasing/creating new ones
+    // Also test if that actually is more efficient
+    this.nodes.forEach((node) => {
+      node.parentNode?.removeChild(node);
+    });
+    polygons.forEach((polygon) => {
+      const polygonNode = document.createElement('div');
+      polygonNode.classList.add('point');
+      polygonNode.style.left = `${polygon[0]}px`;
+      polygonNode.style.top = `${polygon[1]}px`;
+      polygonNode.style.height = `${polygon[2] - polygon[1]}px`;
+      this.container.appendChild(polygonNode);
+      this.nodes.push(polygonNode);
+    });
+    const end = new Date();
+    console.log(`Built DOM in ${+end - +calculated}`);
   }
 
   /**
