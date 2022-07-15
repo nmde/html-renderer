@@ -102,35 +102,44 @@ export default class Renderer {
       });
       return projectedThing;
     });
+    const t1 = new Date();
+    console.log(`Calculated projection in ${+t1 - +start}`);
     // Cast rays
     const intersections: number[][] = [];
     for (let x = leftBound; x < rightBound; x += 1) {
       for (let y = topBound; y < bottomBound; y += 1) {
         const ray = new Vector([x, y, this.camera.position.z]);
-        projected?.forEach((thing) => {
-          let intersects = false;
-          let f = 0;
-          while (!intersects && f < thing.faces.length) {
-            intersects = pointInPolgyon(
-              [ray.x, ray.y],
-              thing.faces[f].vertices.map((vertex) => [
-                vertex.value[0],
-                vertex.value[1],
-              ]),
-            );
-            f += 1;
+        let intersects = false;
+        let i = 0;
+        if (projected) {
+          while (!intersects && i < projected?.length) {
+            const thing = projected[i];
+            let f = 0;
+            while (!intersects && f < thing.faces.length) {
+              intersects = pointInPolgyon(
+                [ray.x, ray.y],
+                thing.faces[f].vertices.map((vertex) => [
+                  vertex.value[0],
+                  vertex.value[1],
+                ]),
+              );
+              f += 1;
+            }
+            if (!intersections[x]) {
+              intersections[x] = [];
+            }
+            if (intersects) {
+              intersections[x][y] = 1;
+            } else {
+              intersections[x][y] = 0;
+            }
+            i += 1;
           }
-          if (!intersections[x]) {
-            intersections[x] = [];
-          }
-          if (intersects) {
-            intersections[x][y] = 1;
-          } else {
-            intersections[x][y] = 0;
-          }
-        });
+        }
       }
     }
+    const t2 = new Date();
+    console.log(`Cast rays in ${+t2 - +t1}`);
     const polygons: number[][] = [];
     intersections.forEach((row, x) => {
       let rect: number[] = [0, 0];
@@ -153,8 +162,8 @@ export default class Renderer {
         polygons.push([x, ...rect]);
       }
     });
-    const calculated = new Date();
-    console.log(`Calculated polygons in ${+calculated - +start}`);
+    const t3 = new Date();
+    console.log(`Calculated polygons in ${+t3 - +t2}`);
 
     // TODO: try to adjust existing nodes instead of erasing/creating new ones
     // Also test if that actually is more efficient
@@ -171,7 +180,8 @@ export default class Renderer {
       this.nodes.push(polygonNode);
     });
     const end = new Date();
-    console.log(`Built DOM in ${+end - +calculated}`);
+    console.log(`Built DOM in ${+end - +t3}`);
+    console.log(`Total render time: ${+end - +start}`);
   }
 
   /**
