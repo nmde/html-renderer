@@ -44,6 +44,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
             ["axios", "npm:0.27.2"],\
             ["babel-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:8.2.5"],\
+            ["cross-env", "npm:7.0.3"],\
             ["css-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:6.7.1"],\
             ["d3-color", "npm:3.1.0"],\
             ["d3-interpolate", "npm:3.0.1"],\
@@ -5173,6 +5174,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["cross-env", [\
+        ["npm:7.0.3", {\
+          "packageLocation": "./.yarn/cache/cross-env-npm-7.0.3-96d81820f4-26f2f3ea2a.zip/node_modules/cross-env/",\
+          "packageDependencies": [\
+            ["cross-env", "npm:7.0.3"],\
+            ["cross-spawn", "npm:7.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["cross-spawn", [\
         ["npm:7.0.3", {\
           "packageLocation": "./.yarn/cache/cross-spawn-npm-7.0.3-e4ff3e65b3-671cc7c728.zip/node_modules/cross-spawn/",\
@@ -6557,6 +6568,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:cd6c56a667f71c219ece2fa9e5c888802ce463320a6e0d3b7f7787f2b175086075bde39e5a8e63af7c8444aee676f143792f2dcb05181d1861fa80ef97da30da#npm:5.30.0"],\
             ["axios", "npm:0.27.2"],\
             ["babel-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:8.2.5"],\
+            ["cross-env", "npm:7.0.3"],\
             ["css-loader", "virtual:577724396144cc465e389989105486c3029be02bf4a064b803a77c015f40ff112e2d133e5734cc7d10d0087738ba9b745dd98b662f765dab95bb36265dcf8f02#npm:6.7.1"],\
             ["d3-color", "npm:3.1.0"],\
             ["d3-interpolate", "npm:3.0.1"],\

@@ -105,61 +105,32 @@ export default class Renderer {
     const t1 = new Date();
     console.log(`Calculated projection in ${+t1 - +start}`);
     // Cast rays
-    const intersections: number[][] = [];
-    for (let x = leftBound; x < rightBound; x += 1) {
-      for (let y = topBound; y < bottomBound; y += 1) {
-        const ray = new Vector([x, y, this.camera.position.z]);
-        let intersects = false;
-        let i = 0;
-        if (projected) {
-          while (!intersects && i < projected?.length) {
-            const thing = projected[i];
-            let f = 0;
-            while (!intersects && f < thing.faces.length) {
-              intersects = pointInPolgyon(
-                [ray.x, ray.y],
-                thing.faces[f].vertices.map((vertex) => [
-                  vertex.value[0],
-                  vertex.value[1],
-                ]),
-              );
-              f += 1;
-            }
-            if (!intersections[x]) {
-              intersections[x] = [];
-            }
-            if (intersects) {
-              intersections[x][y] = 1;
-            } else {
-              intersections[x][y] = 0;
-            }
-            i += 1;
-          }
-        }
-      }
-    }
+    const intersections: Record<number, Record<number, boolean>> = (
+      window as any
+    ).castRays(leftBound, rightBound, topBound, bottomBound, projected);
+    console.log(intersections);
     const t2 = new Date();
     console.log(`Cast rays in ${+t2 - +t1}`);
     const polygons: number[][] = [];
-    intersections.forEach((row, x) => {
+    Object.entries(intersections).forEach(([x, row]) => {
       let rect: number[] = [0, 0];
       let buildingPolygon = false;
-      row.forEach((col, y) => {
-        if (col === 1) {
+      Object.entries(row).forEach(([y, intersects]) => {
+        if (intersects) {
           if (buildingPolygon) {
-            rect[1] = y;
+            rect[1] = Number(y);
           } else {
             buildingPolygon = true;
-            rect[0] = y;
+            rect[0] = Number(y);
           }
         } else if (buildingPolygon) {
           buildingPolygon = false;
-          polygons.push([x, ...rect]);
+          polygons.push([Number(x), ...rect]);
           rect = [0, 0];
         }
       });
       if (buildingPolygon) {
-        polygons.push([x, ...rect]);
+        polygons.push([Number(x), ...rect]);
       }
     });
     const t3 = new Date();
@@ -167,9 +138,11 @@ export default class Renderer {
 
     // TODO: try to adjust existing nodes instead of erasing/creating new ones
     // Also test if that actually is more efficient
+    console.log(polygons);
     this.nodes.forEach((node) => {
       node.parentNode?.removeChild(node);
     });
+    /*
     polygons.forEach((polygon) => {
       const polygonNode = document.createElement('div');
       polygonNode.classList.add('point');
@@ -182,6 +155,21 @@ export default class Renderer {
     const end = new Date();
     console.log(`Built DOM in ${+end - +t3}`);
     console.log(`Total render time: ${+end - +start}`);
+    */
+    Object.entries(intersections).forEach(([x, row]) => {
+      Object.entries(row).forEach(([y, intersects]) => {
+        if (intersects) {
+          const polygonNode = document.createElement('div');
+          polygonNode.classList.add('point');
+          polygonNode.style.left = `${x}px`;
+          polygonNode.style.top = `${y}px`;
+          polygonNode.style.height = '1px';
+          polygonNode.style.width = '1px';
+          this.container.appendChild(polygonNode);
+          this.nodes.push(polygonNode);
+        }
+      });
+    });
   }
 
   /**

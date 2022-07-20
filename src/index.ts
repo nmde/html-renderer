@@ -9,6 +9,13 @@ import { loop } from './util';
  * Main program entry.
  */
 async function main() {
+  // @ts-ignore
+  const go = new Go();
+  const wasm = await WebAssembly.instantiateStreaming(
+    fetch('./dist/rayTracing.wasm'),
+    go.importObject,
+  );
+  go.run(wasm.instance);
   const renderer = new Renderer(
     document.getElementById('game-window') as HTMLElement,
   );
@@ -33,7 +40,11 @@ async function main() {
   ) {
     loop(
       () => {
-        things[obj].rotate(new Vector(axis), new Vector(rotation), Math.PI / 180);
+        things[obj].rotate(
+          new Vector(axis),
+          new Vector(rotation),
+          Math.PI / 180,
+        );
         renderer.render();
       },
       renderer.speed,
