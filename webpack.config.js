@@ -1,25 +1,48 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const frontend = require('nmde-common/config/frontend');
+const babelPresetTypescript = require('@babel/preset-typescript');
 const path = require('path');
 
-module.exports = frontend(
-  path.resolve('.', 'src', 'index.ts'),
-  path.resolve('.', 'dist'),
-  {
-    module: {
-      rules: [
-        {
-          test: /\.stl/,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                publicPath: 'dist',
-              },
+module.exports = {
+  mode: 'development',
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                babelPresetTypescript,
+              ],
+            }
+          },
+          {
+            loader: 'ts-loader',
+          },
+        ],
+      },
+      {
+        test: /\.stl/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: 'dist',
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   },
-);
+  output: {
+    filename: '[name].js',
+    path: path.resolve('.', 'dist'),
+  },
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx'],
+  },
+};

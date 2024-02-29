@@ -2,14 +2,14 @@
   "name": "game",
   "version": "1.0.0",
   "scripts": {
-    "build": "tinygo build -o dist/rayTracing.wasm -target wasm ./src/rayTracing.go && yarn webpack",
+    "build": "yarn webpack",
     "start": "node index.js"
   },
   "main": "index.js",
   "license": "MIT",
-  "packageManager": "yarn@3.2.1",
   "devDependencies": {
     "@babel/core": "^7.18.6",
+    "@babel/preset-typescript": "^7.23.3",
     "@types/d3-color": "^3.1.0",
     "@types/d3-interpolate": "^3.0.1",
     "@types/gl-vec3": "^1.1.1",
@@ -23,11 +23,9 @@
     "eslint": "^8.18.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^39.3.3",
     "eslint-plugin-sort-class-members": "^1.14.1",
     "eslint-plugin-tsdoc": "^0.2.16",
     "file-loader": "^6.2.0",
-    "nmde-common": "https://github.com/nmde/nmde-common.git",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.1",
     "tslib": "^2.4.0",
